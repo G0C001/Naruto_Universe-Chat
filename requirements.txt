@@ -1,4 +1,1 @@
-django
-pickle
-IPython
-llama_index
+ipython

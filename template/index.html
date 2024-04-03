@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Interface</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #3d3d3d;
+    margin: 0;
+    padding: 0;
+}
+
+.chat-container { 
+    width: 80%;
+    margin: 20px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.chat-header {
+    background-color: #303030;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+#chat-area {
+    height: 580px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #b9b9f1;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.user-message {
+    background-color: #666666;
+    color: white;
+    align-self: flex-end;
+    float: right; 
+}
+
+.bot-message {
+    background: linear-gradient(to right, #008CBA, #458585, #FF5733);
+    color: white;
+    float: left;
+}
+
+.message p {
+    margin: 0;
+    word-wrap: break-word;
+}
+
+.chat-input {
+    display: flex;
+    align-items: center; /* Updated to center vertically */
+    background-color: #1f1e1e;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+}
+
+#user-input {
+    flex-grow: 1;
+    padding: 8px;
+    border: none;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#user-input:focus {
+    outline: none;
+}
+
+#send-button {
+    background-color: #0075f3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+@media only screen and (max-width: 768px) {
+    #chat-area {
+        height: 495px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            Chat With Naruto Universe
+        </div>
+        <div id="chat-area"></div>
+        <form id="chat-form">
+            {% csrf_token %}
+            <div class="chat-input">
+                <input type="text" id="user-input" name="user-input" placeholder="Type your message...">
+                <button type="submit" id="send-button">Send</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#chat-form').submit(function(event) {
+                event.preventDefault();
+                
+                var userMessage = $('#user-input').val().trim(); // Trim removes leading and trailing spaces
+    
+                // Check if the message is not empty
+                if (userMessage !== '') {
+                    var chatArea = $('#chat-area');
+    
+                    var userDiv = $('<div>').addClass('message user-message').html('<p>' + userMessage + '</p>');
+                    chatArea.append(userDiv);
+    
+                    var formData = $(this).serialize();
+    
+                    $.ajax({
+                        type: 'POST',
+                        url: '',
+                        data: formData,
+                        success: function(response) {
+                            var botResponse = response['result'];
+                            var botDiv = $('<div>').addClass('message bot-message').html('<p>' + botResponse + '</p>');
+                            chatArea.append(botDiv);
+    
+                            $('#user-input').val("");
+                            chatArea.scrollTop(chatArea.prop('scrollHeight'));
+                        },
+                        error: function(xhr, errmsg, err) {
+                            console.log(xhr.status + ": " + xhr.responseText);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+    
+</body>
+</html>

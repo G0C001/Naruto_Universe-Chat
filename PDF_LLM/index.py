@@ -3,8 +3,8 @@ import pickle
 from IPython.display import display,Markdown
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
 
-OPENAI_API_TOKEN = "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"
-os.environ["OPENAI_API_KEY"] = OPENAI_API_TOKEN
+# OPENAI_API_TOKEN = "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"
+# os.environ["OPENAI_API_KEY"] = OPENAI_API_TOKEN
 
 class QueryEngine:
     def __init__(self, index_file):

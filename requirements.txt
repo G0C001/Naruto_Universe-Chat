@@ -1,0 +1,4 @@
+django
+pickle
+IPython
+llama_index
